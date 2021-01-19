@@ -25,14 +25,10 @@
 #include "Colors.h"
 
 
-class Point
+struct Point
 {
-public:
 	int x;
 	int y;
-public:
-	Point(int cx, int cy);
-	~Point();
 };
 class Graphics
 {
@@ -71,9 +67,12 @@ public:
 	void GraphExp(int x1, int x2, int y, float function(float), Color c, float scalingx = 10.0/float(ScreenWidth), float scalingy = float(ScreenHeight) / 4.0);
 	void Graph(float function(float), Color c, float interval = 10.0f, int offsetX = 0, int offsetY = 0, bool fill=false);
 	void DrawLine(int x1, int y1, int x2, int y2, Color c);
+	void DrawLine(Point p1, Point p2, Color c);
 	void DrawAxes(Color c, float interval = 10.0f, int offsetX = 0, int offsetY = 0);
 	void DrawPolygon(int n, int vertices[][2], Color c);
+	void DrawPolygon(int n, Point vertices[], Color c);
 	void DrawCircle(int x, int y, int radius, Color c);
+	void DrawCircle(Point p, int radius, Color c);
 	/******************************************************/
 	~Graphics();
 private:

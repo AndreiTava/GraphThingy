@@ -361,15 +361,6 @@ std::wstring Graphics::Exception::GetExceptionType() const
 }
 /************************************************/
 /*              My Stuff                        */
-Point::Point(int cx, int cy)
-{
-	x = cx;
-	y = cy;
-}
-Point::~Point()
-{
-
-}
 using namespace Utility;
 void Graphics::GraphExp(int x1, int x2, int y, float function(float), Color c, float scalingx, float scalingy)
 {
@@ -495,6 +486,11 @@ void Graphics::DrawLine(int x1, int y1, int x2, int y2, Color c)
 	}
 }
 
+void Graphics::DrawLine(Point p1, Point p2, Color c)
+{
+	DrawLine(p1.x, p1.y, p2.x, p2.y, c);
+}
+
 void Graphics::DrawAxes(Color c, float interval, int offsetX, int offsetY)
 {
 	int movex = centerX - offsetX;
@@ -572,6 +568,13 @@ void Graphics::DrawPolygon(int n, int vertices[][2], Color c)
 
 }
 
+void Graphics::DrawPolygon(int n, Point vertices[], Color c)
+{
+	for (int i = 0; i < n - 1; i++)
+		DrawLine(vertices[i], vertices[i + 1], c);
+	DrawLine(vertices[n - 1],vertices[0], c);
+}
+
 void Graphics::DrawCircle(int x, int y, int radius, Color c)
 {
 	for (int i = -radius; i <= radius; i++)
@@ -582,6 +585,11 @@ void Graphics::DrawCircle(int x, int y, int radius, Color c)
 				if (IsInBounds(x + i, y + j))
 				PutPixel(x + i, y + j, c);
 		}
+}
+
+void Graphics::DrawCircle(Point p, int radius, Color c)
+{
+	DrawCircle(p.x, p.y, radius, c);
 }
 
 /************************************************/

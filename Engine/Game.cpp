@@ -29,20 +29,6 @@ Game::Game( MainWindow& wnd )
 {
 }
 
-void Game::DrawCircle(int x, int y, int radius, Color c)
-{
-	
-	for (int i = -radius; i <= radius; i++)
-		for (int j = -radius; j <= radius; j++)
-		{
-			int value = radius * radius - i * i - j * j;
-			if (value >= radius)
-				gfx.PutPixel(x + i, y + j, c);
-		}
-}
-
-
-
 
 void Game::Go()
 {
@@ -76,12 +62,12 @@ void Game::UpdateModel()
 void Game::ComposeFrame()
 {
 	//DrawCircle(400, 300, 100, { 255, 0, 0 });
-	//DrawLine(400, 300, 500, 300, { 0, 255, 0 });
+	//gfx.DrawLine(400, 300, wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), { 0, 255, 0 });
 	//DrawLine(400, 300, x, y, { 255,255,255 });
-	//gfx.DrawPolygon(4, triangle, { 0, 0, 255 });
+	//gfx.DrawPolygon(3, triangle, { 0, 0, 255 });
 	//gfx.DrawLine(gfx.ScreenWidth / 2, gfx.ScreenHeight / 2, wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), { 255,255,255 });
 	
 	gfx.DrawAxes(Colors::White, interval, offsetX, offsetY);
-	gfx.Graph(sin, Colors::Red, interval, offsetX, offsetY, true);
+	gfx.Graph(Math::CustomFunction, Colors::Red, interval, offsetX, offsetY, false);
 }
 

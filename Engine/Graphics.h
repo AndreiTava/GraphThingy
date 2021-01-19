@@ -73,6 +73,7 @@ public:
 	void DrawLine(int x1, int y1, int x2, int y2, Color c);
 	void DrawAxes(Color c, float interval = 10.0f, int offsetX = 0, int offsetY = 0);
 	void DrawPolygon(int n, int vertices[][2], Color c);
+	void DrawCircle(int x, int y, int radius, Color c);
 	/******************************************************/
 	~Graphics();
 private:

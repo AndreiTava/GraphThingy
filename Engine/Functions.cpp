@@ -46,7 +46,7 @@ namespace Math
 {
 	float CustomFunction(float x)
 	{
-		return x*x;
+		return x*x-4;
 	}
 
 }

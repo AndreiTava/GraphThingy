@@ -37,7 +37,6 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
-	void DrawCircle(int x, int y, int radius, Color c);
 	/********************************/
 private:
 	MainWindow& wnd;
@@ -48,5 +47,10 @@ private:
 	int offsetX = 0;
 	int offsetY = 0;
 	float step = 1.0f;
+	int triangle[4][2] = {
+		{100,200},
+		{150,300},
+		{450,150}
+	};
 	/********************************/
 };

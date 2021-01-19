@@ -574,12 +574,12 @@ void Graphics::DrawPolygon(int n, int vertices[][2], Color c)
 
 void Graphics::DrawCircle(int x, int y, int radius, Color c)
 {
-
 	for (int i = -radius; i <= radius; i++)
 		for (int j = -radius; j <= radius; j++)
 		{
 			int value = radius * radius - i * i - j * j;
-			if (value >= radius)
+			if (value >= 0 && value <= 2 * radius)
+				if (IsInBounds(x + i, y + j))
 				PutPixel(x + i, y + j, c);
 		}
 }

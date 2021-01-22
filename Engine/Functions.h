@@ -1,5 +1,6 @@
 #pragma once
 #include "Graphics.h"
+#include "Geometry.h"
 #include <cmath>
 namespace Utility
 {
@@ -9,6 +10,7 @@ namespace Utility
 	bool IsInBounds(Point p);
 	float Distance(int x1, int y1, int x2, int y2);
 	float Distance(Point p1, Point p2);
+	bool LinesIntersecting(Line l1, Line l2);
 }
 namespace Math
 {

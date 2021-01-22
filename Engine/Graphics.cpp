@@ -361,9 +361,10 @@ std::wstring Graphics::Exception::GetExceptionType() const
 }
 /************************************************/
 /*              My Stuff                        */
-using namespace Utility;
+
 void Graphics::GraphExp(int x1, int x2, int y, float function(float), Color c, float scalingx, float scalingy)
 {
+	using namespace Utility;
 	if (x1 > x2)
 		std::swap(x1, x2);
 	int prevx = -1;
@@ -384,6 +385,7 @@ void Graphics::GraphExp(int x1, int x2, int y, float function(float), Color c, f
 
 void Graphics::Graph(float function(float), Color c, float interval, int offsetX, int offsetY, bool fill)
 {
+	using namespace Utility;
 	int prevx = -1;
 	int prevy = -1;
 	float scaling = 1.f;
@@ -429,8 +431,9 @@ void Graphics::Graph(float function(float), Color c, float interval, int offsetX
 
 void Graphics::DrawLine(int x1, int y1, int x2, int y2, Color c)
 {
-	Utility::ClipToBounds(x1, y1);
-	Utility::ClipToBounds(x2, y2);
+	using namespace Utility;
+	ClipToBounds(x1, y1);
+	ClipToBounds(x2, y2);
 	if (x1 == x2)
 	{
 		if (y1 > y2)
@@ -491,8 +494,14 @@ void Graphics::DrawLine(Point p1, Point p2, Color c)
 	DrawLine(p1.x, p1.y, p2.x, p2.y, c);
 }
 
+void Graphics::DrawLine(Line line, Color c)
+{
+	DrawLine(line.p1, line.p2,c);
+}
+
 void Graphics::DrawAxes(Color c, float interval, int offsetX, int offsetY)
 {
+	using namespace Utility;
 	int movex = centerX - offsetX;
 	int movey = centerY - offsetY;
 	float scaling = 1.f;
@@ -577,6 +586,7 @@ void Graphics::DrawPolygon(int n, Point vertices[], Color c)
 
 void Graphics::DrawCircle(int x, int y, int radius, Color c)
 {
+	using namespace Utility;
 	for (int i = -radius; i <= radius; i++)
 		for (int j = -radius; j <= radius; j++)
 		{

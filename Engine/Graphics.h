@@ -23,13 +23,9 @@
 #include <wrl.h>
 #include "ChiliException.h"
 #include "Colors.h"
+#include "Geometry.h"
 
 
-struct Point
-{
-	int x;
-	int y;
-};
 class Graphics
 {
 public:
@@ -68,6 +64,7 @@ public:
 	void Graph(float function(float), Color c, float interval = 10.0f, int offsetX = 0, int offsetY = 0, bool fill=false);
 	void DrawLine(int x1, int y1, int x2, int y2, Color c);
 	void DrawLine(Point p1, Point p2, Color c);
+	void DrawLine(Line line, Color c);
 	void DrawAxes(Color c, float interval = 10.0f, int offsetX = 0, int offsetY = 0);
 	void DrawPolygon(int n, int vertices[][2], Color c);
 	void DrawPolygon(int n, Point vertices[], Color c);

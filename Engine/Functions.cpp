@@ -41,6 +41,25 @@ namespace Utility
 	{
 		return Distance(p1.x, p1.y, p2.x, p2.y);
 	}
+
+	bool LinesIntersecting( Line l1, Line l2)
+	{
+		if (l1.p1.x > l1.p2.x)
+			std::swap(l1.p1, l1.p2);
+		if (l2.p1.x > l2.p2.x)
+			std::swap(l2.p1, l2.p2);
+
+		float slope1 = float(l1.p2.y - l1.p1.y) / float(l1.p2.x - l1.p1.x);
+		float slope2 = float(l2.p2.y - l2.p1.y) / float(l2.p2.x - l2.p1.x);
+
+		if(slope1 == slope2)
+			return false;
+		else
+		{
+
+		}
+		return true;
+	}
 }
 namespace Math
 {

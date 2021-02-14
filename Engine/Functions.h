@@ -2,6 +2,7 @@
 #include "Graphics.h"
 #include "Geometry.h"
 #include <cmath>
+#include <string>
 namespace Utility
 {
 	void ClipToBounds(int& x, int& y);
@@ -14,5 +15,45 @@ namespace Utility
 }
 namespace Math
 {
-float CustomFunction(float x);
+float CustomFunction1(float x);
+float CustomFunction2(float x);
+}
+namespace Input
+{
+	using namespace std;
+
+	enum class Functions
+	{
+		invalid,
+		abs,
+		ceil,
+		floor,
+		trunc,
+		round,
+		exp,
+		log,
+		sqrt,
+		cbrt,
+		sin,
+		cos,
+		tan,
+		asin,
+		acos,
+		atan,
+		sinh,
+		cosh,
+		tanh,
+		asinh,
+		acosh,
+		atanh,
+		erf,
+		erfc,
+		tgamma
+	};
+	Functions resolveOption(string fnc);
+	unsigned int findClosedPos(string str, unsigned int openPos);
+	unsigned int findLeftBound(string str);
+	unsigned int findRightBound(string str);
+	string calcFunc(string expr, float param);
+	float calcFuncVal(float param);
 }

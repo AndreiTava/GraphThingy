@@ -76,12 +76,12 @@ void Game::ComposeFrame()
 	//gfx.DrawPolygon(4, square, { 0, 0, 255 });
 	//gfx.DrawLine(gfx.ScreenWidth / 2, gfx.ScreenHeight / 2, wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), { 255,255,255 });
 	
-	/*gfx.DrawAxes(Colors::White, interval, offsetX, offsetY);
-	gfx.Graph(Math::CustomFunction, Colors::Red, interval, offsetX, offsetY, false);*/
-
-	gfx.DrawLine(l1, Colors::White);
+	gfx.DrawAxes(Colors::White, interval, offsetX, offsetY);
+	gfx.Graph(Input::calcFuncVal, Colors::Red, interval, offsetX, offsetY, false);
+	//gfx.Graph(Math::CustomFunction2, Colors::Green, interval, offsetX, offsetY, false);
+	/*gfx.DrawLine(l1, Colors::White);
 	gfx.DrawLine(l2, Colors::White);
 	if(!Utility::LinesIntersecting(l1,l2))
-		gfx.DrawCircle({ 400, 300 }, 100, { 255, 0, 0 });
+		gfx.DrawCircle({ 400, 300 }, 100, { 255, 0, 0 });*/
 }
 

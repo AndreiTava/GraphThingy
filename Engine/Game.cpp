@@ -77,7 +77,7 @@ void Game::ComposeFrame()
 	//gfx.DrawLine(gfx.ScreenWidth / 2, gfx.ScreenHeight / 2, wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), { 255,255,255 });
 	
 	gfx.DrawAxes(Colors::White, interval, offsetX, offsetY);
-	gfx.Graph(Input::calcFuncVal, Colors::Red, interval, offsetX, offsetY, false);
+	gfx.Graph(Math::CustomFunction1, Colors::Red, interval, offsetX, offsetY, false);
 	//gfx.Graph(Math::CustomFunction2, Colors::Green, interval, offsetX, offsetY, false);
 	/*gfx.DrawLine(l1, Colors::White);
 	gfx.DrawLine(l2, Colors::White);

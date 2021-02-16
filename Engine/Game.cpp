@@ -36,6 +36,8 @@ Game::Game( MainWindow& wnd )
 	l2.p1.y = 0;
 	l2.p2.x = 350;
 	l2.p2.y = 300;
+
+	func = extract(expr);
 }
 
 
@@ -77,7 +79,7 @@ void Game::ComposeFrame()
 	//gfx.DrawLine(gfx.ScreenWidth / 2, gfx.ScreenHeight / 2, wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), { 255,255,255 });
 	
 	gfx.DrawAxes(Colors::White, interval, offsetX, offsetY);
-	gfx.Graph(Math::CustomFunction1, Colors::Red, interval, offsetX, offsetY, false);
+	gfx.Graph(func, Colors::Red, interval, offsetX, offsetY, false);
 	//gfx.Graph(Math::CustomFunction2, Colors::Green, interval, offsetX, offsetY, false);
 	/*gfx.DrawLine(l1, Colors::White);
 	gfx.DrawLine(l2, Colors::White);

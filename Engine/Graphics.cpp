@@ -429,6 +429,52 @@ void Graphics::Graph(float function(float), Color c, float interval, int offsetX
 	}
 }
 
+void Graphics::Graph(node *function, Color c, float interval, int offsetX, int offsetY, bool fill)
+{
+	using namespace Utility;
+	int prevx = -1;
+	int prevy = -1;
+	float scaling = 1.f;
+	if (centerX > centerY)
+		scaling = interval / float(centerX);
+	else
+		scaling = interval / float(centerY);
+	int movex = centerX - offsetX;
+	int movey = centerY - offsetY;
+	float precision = 0.01f;
+	Color dimC(c.GetR() / 2, c.GetG() / 2, c.GetB() / 2);
+	for (float x = 0.f; x <= ScreenWidth; x += precision)
+	{
+		int valx = int(round(x));
+		int valy = movey - int(round(function->computeTree((x - movex) * scaling) / scaling));
+
+		if (fill)
+		{
+			for (int y = movey; y < valy; y++)
+				if (IsInBounds(valx, y) && (valx != prevx || y != prevy))
+				{
+					PutPixel(valx, y, dimC);
+					prevx = valx;
+					prevy = y;
+				}
+			for (int y = movey; y > valy; y--)
+				if (IsInBounds(valx, y) && (valx != prevx || y != prevy))
+				{
+					PutPixel(valx, y, dimC);
+					prevx = valx;
+					prevy = y;
+				}
+		}
+
+		if (IsInBounds(valx, valy) && (valx != prevx || valy != prevy))
+		{
+			PutPixel(valx, valy, c);
+			prevx = valx;
+			prevy = valy;
+		}
+	}
+}
+
 void Graphics::DrawLine(int x1, int y1, int x2, int y2, Color c)
 {
 	using namespace Utility;

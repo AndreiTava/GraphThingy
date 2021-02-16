@@ -24,6 +24,7 @@
 #include "Mouse.h"
 #include "Graphics.h"
 #include "Functions.h"
+#include "Input.h"
 
 class Game
 {
@@ -54,5 +55,7 @@ private:
 		{210,320},
 		{320,120}
 	};
+	std::string expr = "(sin((x)+(2)))+((-1)*(log(x)))";
+	node* func;
 	/********************************/
 };

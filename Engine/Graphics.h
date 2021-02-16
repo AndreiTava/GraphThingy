@@ -24,6 +24,7 @@
 #include "ChiliException.h"
 #include "Colors.h"
 #include "Geometry.h"
+#include "Input.h"
 
 
 class Graphics
@@ -62,6 +63,7 @@ public:
 	/*                       My Stuff                     */
 	void GraphExp(int x1, int x2, int y, float function(float), Color c, float scalingx = 10.0/float(ScreenWidth), float scalingy = float(ScreenHeight) / 4.0);
 	void Graph(float function(float), Color c, float interval = 10.0f, int offsetX = 0, int offsetY = 0, bool fill=false);
+	void Graph(node *function, Color c, float interval = 10.0f, int offsetX = 0, int offsetY = 0, bool fill = false);
 	void DrawLine(int x1, int y1, int x2, int y2, Color c);
 	void DrawLine(Point p1, Point p2, Color c);
 	void DrawLine(Line line, Color c);

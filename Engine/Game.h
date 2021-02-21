@@ -24,7 +24,7 @@
 #include "Mouse.h"
 #include "Graphics.h"
 #include "Functions.h"
-#include "Input.h"
+#include "Node.h"
 
 class Game
 {
@@ -48,7 +48,10 @@ private:
 	int offsetX = 0;
 	int offsetY = 0;
 	float step = 1.0f;
-	std::string expr = "sin(x)";
-	node func;
+	std::string expr1 = "sin(x)";
+	std::string expr2 = "x^2";
+	node func1;
+	node func2;
+	node func3;
 	/********************************/
 };

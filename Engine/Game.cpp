@@ -26,9 +26,10 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	func(processExpr(expr))
+	func1( expr1 ),
+	func2( expr2 )
 {
-	func.simplifyTree();
+	func3 = func1 + func2;
 }
 
 
@@ -65,7 +66,7 @@ void Game::ComposeFrame()
 {
 	
 	gfx.DrawAxes(Colors::White, interval, offsetX, offsetY);
-	gfx.Graph(func, Colors::Red, interval, offsetX, offsetY, false);
+	gfx.Graph(func3, Colors::Red, interval, offsetX, offsetY, false);
 	
 }
 

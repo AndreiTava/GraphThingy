@@ -24,7 +24,7 @@
 #include "ChiliException.h"
 #include "Colors.h"
 #include "Geometry.h"
-#include "Input.h"
+#include "Node.h"
 
 
 class Graphics

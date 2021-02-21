@@ -1,10 +1,8 @@
 
-#include <string>
-#include <cmath>
-#include "Input.h"
+#include "Node.h"
 
 
-unsigned int findPair(std::string str, unsigned int pos, bool open)
+unsigned int node::findPair(std::string str, unsigned int pos, bool open)
 {
 	unsigned int count = 0;
 	if (open)
@@ -58,7 +56,7 @@ unsigned int findPair(std::string str, unsigned int pos, bool open)
 	return 0;
 }
 
-void putParenth(std::string& str, unsigned int opnPos, unsigned int clsPos)
+void node::putParenth(std::string& str, unsigned int opnPos, unsigned int clsPos)
 {
 	if (opnPos < clsPos)
 	{
@@ -67,7 +65,7 @@ void putParenth(std::string& str, unsigned int opnPos, unsigned int clsPos)
 	}
 }
 
-std::string processExpr(std::string expr)
+void node::processExpr(std::string& expr)
 {
 	/*
 	KNOWN PROBLEMS / TODO (*,**,***, difficulty to fix),(+,++,+++, necessity of feature):
@@ -229,7 +227,6 @@ std::string processExpr(std::string expr)
 	expr.erase(0, 1);
 	expr.erase(expr.length() - 1, 1);
 
-	return expr;
 };
 
 node::functions node::resolveSymbol(std::string fnc)
@@ -288,7 +285,7 @@ node::functions node::resolveSymbol(std::string fnc)
 
 }
 
-node::node(std::string expr)
+void node::extract(std::string expr)
 {
 	unsigned int Pos = expr.find("(");
 	if (Pos != std::string::npos)
@@ -305,8 +302,10 @@ node::node(std::string expr)
 			closed = findPair(expr, Pos, 1);
 			std::string rightexpr = expr.substr(Pos + 1, closed - Pos - 1);
 
-			left = new node(leftexpr);
-			right = new node(rightexpr);
+			left = new node;
+			left->extract(leftexpr);
+			right = new node;
+			right->extract(rightexpr);
 
 		}
 		else
@@ -315,7 +314,8 @@ node::node(std::string expr)
 			field.func = resolveSymbol(expr.substr(0, Pos));
 
 			std::string rightexpr = expr.substr(Pos + 1, closed - Pos - 1);
-			right = new node(rightexpr);
+			right = new node;
+			right->extract(rightexpr);
 
 		}
 	}
@@ -330,6 +330,51 @@ node::node(std::string expr)
 			type = options::constant;
 			field.nr = stof(expr);
 		}
+	}
+}
+
+node::~node()
+{
+	delete left;
+	left = nullptr;
+	delete right;
+	right = nullptr;
+}
+
+node::node()
+{
+	type = options::constant;
+	field.nr = 0;
+	left = nullptr;
+	right = nullptr;
+}
+
+node::node(std::string expr)
+{
+	processExpr(expr);
+	this->extract(expr);
+	this->simplifyTree();
+}
+
+node::node(const node& replacement)
+{
+	delete left;
+	left = nullptr;
+	delete right;
+	right = nullptr;
+	type = replacement.type;
+	field = replacement.field;
+	if (replacement.type == options::oprator)
+	{
+		left = new node;
+		*left = *replacement.left;
+		right = new node;
+		*right = *replacement.right;
+	}
+	else if (replacement.type == options::function)
+	{
+		right = new node;
+		*right = *replacement.right;
 	}
 }
 
@@ -363,6 +408,67 @@ void node::simplifyTree()
 			}
 		}
 	}
+}
+
+void node::operator=(std::string expr)
+{
+	processExpr(expr);
+	delete left;
+	left = nullptr;
+	delete right;
+	right = nullptr;
+	this->extract(expr);
+	this->simplifyTree();
+}
+
+void node::operator=(const node& replacement)
+{
+	delete left;
+	left = nullptr;
+	delete right;
+	right = nullptr;
+	type = replacement.type;
+	field = replacement.field;
+	if (replacement.type == options::oprator)
+	{
+		left = new node;
+		*left = *replacement.left;
+		right = new node;
+		*right = *replacement.right;
+	}
+	else if (replacement.type == options::function)
+	{
+		right = new node;
+		*right = *replacement.right;
+	}
+}
+
+const node node::operator+(const node& rightSide)
+{
+	node newNode;
+	if (this->type == options::parameter)
+	{
+		newNode = rightSide;
+	}
+	else
+	{
+		newNode.type = this->type;
+		newNode.field = this->field;
+		if (this->type == options::oprator)
+		{
+			newNode.left = new node;
+			*newNode.left = *this->left + rightSide;
+			newNode.right = new node;
+			*newNode.right = *this->right + rightSide;
+		}
+		else if (this->type == options::function)
+		{
+			newNode.right = new node;
+			*newNode.right = *this->right + rightSide;
+		}
+	}
+	return newNode;
+	
 }
 
 float const node::computeTree(float parameter)

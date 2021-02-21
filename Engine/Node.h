@@ -5,7 +5,7 @@
 
 class node
 {
-
+	/*Nested Classes */
 private:
 	enum class options
 	{
@@ -55,27 +55,30 @@ private:
 		};
 		~data() {};
 	};
-
+	/*Static Helper Functions*/
+private:
+	static unsigned int findPair(std::string str, unsigned int pos, bool open);
+	static void putParenth(std::string& str, unsigned int opnPos, unsigned int clsPos);
+	static void processExpr(std::string& expr);
+	static functions resolveSymbol(std::string fnc);
+	/*Member Variables*/
 private:
 	options type = options::oprator;
 	data field;
 	node* left = nullptr;
 	node* right = nullptr;
-
-public:
-	node(std::string);
-	~node()
-	{
-		delete left;
-		delete right;
-	}
-	static functions resolveSymbol(std::string fnc);
-	float const computeTree(float parameter);
+	/*Private Functions*/
+private:
 	void simplifyTree();
+	void extract(std::string expr);
+	/*Public Functions*/
+public:
+	node();
+	node(std::string);
+	node(const node& replacement);
+	~node();
+	float const computeTree(float parameter);
+	void operator=(std::string expr);
+	void operator=(const node& replacement);
+	const node operator+(const node& rightSide);
 };
-
-unsigned int findPair(std::string str, unsigned int pos, bool open);
-
-void putParenth(std::string& str, unsigned int opnPos, unsigned int clsPos);
-
-std::string processExpr(std::string expr);

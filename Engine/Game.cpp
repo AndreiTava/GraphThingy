@@ -25,19 +25,10 @@
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd )
+	gfx( wnd ),
+	func(processExpr(expr))
 {
-	l1.p1.x = 0;
-	l1.p1.y = 0;
-	l1.p2.x = 300;
-	l1.p2.y = 300;
-
-	l2.p1.x = 50;
-	l2.p1.y = 0;
-	l2.p2.x = 350;
-	l2.p2.y = 300;
-
-	func = extract(expr);
+	func.simplifyTree();
 }
 
 
@@ -72,18 +63,9 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	//gfx.DrawCircle({ 400, 300 }, 100, { 255, 0, 0 });
-	//gfx.DrawLine(400, 300, wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), { 0, 255, 0 });
-	//DrawLine(400, 300, x, y, { 255,255,255 });
-	//gfx.DrawPolygon(4, square, { 0, 0, 255 });
-	//gfx.DrawLine(gfx.ScreenWidth / 2, gfx.ScreenHeight / 2, wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), { 255,255,255 });
 	
 	gfx.DrawAxes(Colors::White, interval, offsetX, offsetY);
 	gfx.Graph(func, Colors::Red, interval, offsetX, offsetY, false);
-	//gfx.Graph(Math::CustomFunction2, Colors::Green, interval, offsetX, offsetY, false);
-	/*gfx.DrawLine(l1, Colors::White);
-	gfx.DrawLine(l2, Colors::White);
-	if(!Utility::LinesIntersecting(l1,l2))
-		gfx.DrawCircle({ 400, 300 }, 100, { 255, 0, 0 });*/
+	
 }
 

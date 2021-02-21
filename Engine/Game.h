@@ -48,14 +48,7 @@ private:
 	int offsetX = 0;
 	int offsetY = 0;
 	float step = 1.0f;
-	Line l1, l2;
-	Point square[4] = {
-		{100,200},
-		{170,240},
-		{210,320},
-		{320,120}
-	};
-	std::string expr = "(sin((x)+(2)))+((-1)*(log(x)))";
-	node* func;
+	std::string expr = "sin(x)";
+	node func;
 	/********************************/
 };

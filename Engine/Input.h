@@ -3,72 +3,79 @@
 #include <string>
 #include <cmath>
 
-
-/*ToDo: convert all this to OOP*/
-
-enum class options
+class node
 {
-	function,
-	oprator,
-	parameter,
-	constant
-};
 
-enum class functions
-{
-	invalid,
-	abs,
-	ceil,
-	floor,
-	trunc,
-	round,
-	exp,
-	log,
-	sqrt,
-	cbrt,
-	sin,
-	cos,
-	tan,
-	asin,
-	acos,
-	atan,
-	sinh,
-	cosh,
-	tanh,
-	asinh,
-	acosh,
-	atanh,
-	erf,
-	erfc,
-	tgamma
-};
-
-union data
-{
-	std::string func = "\0";
-	char op;
-	float nr;
-	data()
+private:
+	enum class options
 	{
-		op = '\0';
-		nr = 0;
+		function,
+		oprator,
+		parameter,
+		constant
 	};
-	~data() {};
-};
+	enum class functions
+	{
+		invalid,
+		minus,
+		abs,
+		ceil,
+		floor,
+		trunc,
+		round,
+		exp,
+		log,
+		sqrt,
+		cbrt,
+		sin,
+		cos,
+		tan,
+		asin,
+		acos,
+		atan,
+		sinh,
+		cosh,
+		tanh,
+		asinh,
+		acosh,
+		atanh,
+		erf,
+		erfc,
+		tgamma
+	};
+	union data
+	{
+		functions func = functions::invalid;
+		char op;
+		float nr;
+		data()
+		{
+			op = '\0';
+			nr = 0;
+		};
+		~data() {};
+	};
 
-struct node
-{
+private:
 	options type = options::oprator;
 	data field;
-	node* left = nullptr;           
+	node* left = nullptr;
 	node* right = nullptr;
-	float const computeTree(float parameter);
-};
-functions resolveFunction(std::string fnc);
 
-unsigned int findClosed(std::string str, unsigned int openPos);
+public:
+	node(std::string);
+	~node()
+	{
+		delete left;
+		delete right;
+	}
+	static functions resolveSymbol(std::string fnc);
+	float const computeTree(float parameter);
+	void simplifyTree();
+};
+
+unsigned int findPair(std::string str, unsigned int pos, bool open);
+
+void putParenth(std::string& str, unsigned int opnPos, unsigned int clsPos);
 
 std::string processExpr(std::string expr);
-
-node* extract(std::string expr);
-

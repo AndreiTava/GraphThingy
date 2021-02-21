@@ -429,7 +429,7 @@ void Graphics::Graph(float function(float), Color c, float interval, int offsetX
 	}
 }
 
-void Graphics::Graph(node *function, Color c, float interval, int offsetX, int offsetY, bool fill)
+void Graphics::Graph(node &function, Color c, float interval, int offsetX, int offsetY, bool fill)
 {
 	using namespace Utility;
 	int prevx = -1;
@@ -446,7 +446,7 @@ void Graphics::Graph(node *function, Color c, float interval, int offsetX, int o
 	for (float x = 0.f; x <= ScreenWidth; x += precision)
 	{
 		int valx = int(round(x));
-		int valy = movey - int(round(function->computeTree((x - movex) * scaling) / scaling));
+		int valy = movey - int(round(function.computeTree((x - movex) * scaling) / scaling));
 
 		if (fill)
 		{

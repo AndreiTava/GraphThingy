@@ -1,35 +1,241 @@
 
+#include <string>
+#include <cmath>
 #include "Input.h"
 
-unsigned int findClosed(std::string str, unsigned int openPos)
+
+unsigned int findPair(std::string str, unsigned int pos, bool open)
 {
 	unsigned int count = 0;
-	for (unsigned int i = openPos; i < str.length(); i++)
+	if (open)
 	{
-		switch (str[i])
+		for (unsigned int i = pos; i < str.length(); i++)
 		{
-		case '(':
-		{
-			count++;
-			break;
-		}
-		case ')':
-		{
-			count--;
-			break;
-		}
+			switch (str[i])
+			{
+			case '(':
+			{
+				count++;
+				break;
+			}
+			case ')':
+			{
+				count--;
+				break;
+			}
 
-		default:
-			break;
+			default:
+				break;
+			}
+			if (count == 0)
+				return i;
 		}
-		if (count == 0)
-			return i;
+	}
+	else
+	{
+		for (unsigned int i = pos; i > 0; i--)
+		{
+			switch (str[i])
+			{
+			case '(':
+			{
+				count--;
+				break;
+			}
+			case ')':
+			{
+				count++;
+				break;
+			}
+
+			default:
+				break;
+			}
+			if (count == 0)
+				return i;
+		}
 	}
 	return 0;
 }
 
-functions resolveFunction(std::string fnc)
+void putParenth(std::string& str, unsigned int opnPos, unsigned int clsPos)
 {
+	if (opnPos < clsPos)
+	{
+		str.insert(opnPos, 1, '(');
+		str.insert(clsPos + 1, 1, ')');
+	}
+}
+
+std::string processExpr(std::string expr)
+{
+	/*
+	KNOWN PROBLEMS / TODO (*,**,***, difficulty to fix),(+,++,+++, necessity of feature):
+
+
+	(***),(+++) DOES NOT PROPERLY CHECK FOR SYNTAX ERRORS
+	(*),  (++)  DOES NOT REMOVE UNNECESSARY BRACKETS ( ((x)) )
+	(***),(+)   DOES NOT SUPPORT IMPLICIT FUNCTION CHAINING (sincosx - >sin(cos(x)))
+	*/
+
+	unsigned int Pos = 0;
+
+	Pos = expr.find(' ');  //removing spaces
+	while (Pos != std::string::npos)
+	{
+		expr.erase(Pos, 1);
+		Pos = expr.find(' ');
+	}
+	Pos = expr.find('-');  //expanding binary '-'
+
+	while (Pos != std::string::npos)
+	{
+		if (Pos > 0 && std::string("0123456789x)").find(expr[Pos - 1]) != std::string::npos)
+		{
+			expr.insert(Pos, 1, '+');
+			Pos++;
+		}
+		Pos = expr.find('-', ++Pos);
+	}
+
+	Pos = expr.find_first_not_of("-()^+*/.0123456789x");  //enclosing function arguments
+
+	while (Pos != std::string::npos)
+	{
+		unsigned int argStart = 0;
+		unsigned int argEnd = 0;
+
+		argStart = expr.find_first_of("(-0123456789x", Pos + 1);
+		if (expr[argStart] == '(')
+		{
+			argEnd = findPair(expr, argStart, true);
+		}
+		else
+		{
+			argEnd = expr.find_first_of("(^*/+x", argStart);
+			putParenth(expr, argStart, argEnd);
+			argEnd++;
+
+		}
+		if (Pos == 0 || expr[Pos - 1] != '(' || expr[argEnd + 1] != ')')
+		{
+			putParenth(expr, Pos, argEnd + 1);
+			argStart++;
+		}
+
+		Pos = expr.find_first_not_of("-()^+*/.0123456789x", argStart);
+
+	}
+
+	Pos = expr.find('x');  //enclosing variables
+
+	while (Pos != std::string::npos)
+	{
+		if (Pos == expr.length() - 1 || Pos == 0 || expr[Pos - 1] != '(' || expr[Pos + 1] != ')')
+		{
+			putParenth(expr, Pos, Pos + 1);
+			Pos++;
+		}
+		Pos = expr.find('x', ++Pos);
+	}
+
+	Pos = expr.find_first_of("0123456789");  //enclosing constants
+
+	while (Pos != std::string::npos)
+	{
+		unsigned int nrEnd = expr.find_first_of("^*/+()", Pos);
+		if (nrEnd == std::string::npos)
+		{
+			nrEnd = expr.length();
+		}
+		if (nrEnd == expr.length() || Pos == 0 || expr[Pos - 1] != '(' || expr[nrEnd] != ')')
+		{
+			putParenth(expr, Pos, nrEnd);
+			nrEnd++;
+		}
+		Pos = expr.find_first_of("0123456789", ++nrEnd);
+	}
+
+	Pos = expr.rfind('^');  //enclosing '^'
+
+	while (Pos != std::string::npos)
+	{
+		unsigned int leftBound = findPair(expr, Pos - 1, false);
+		unsigned int rightOpen = expr.find('(', Pos);
+		unsigned int rightBound = findPair(expr, rightOpen, true);
+		if (leftBound == 0 || rightBound == expr.length() - 1 || expr[leftBound - 1] != '(' || expr[rightBound + 1] != ')')
+		{
+			putParenth(expr, leftBound, rightBound + 1);
+		}
+		Pos = expr.rfind('^', leftBound);
+	}
+
+	Pos = expr.find('-');  // enclosing '-'
+	while (Pos != std::string::npos)
+	{
+		unsigned int rightBound = findPair(expr, Pos + 1, true);
+		if (Pos == 0 || rightBound == expr.length() - 1 || expr[Pos - 1] != '(' || expr[rightBound + 1] != ')')
+		{
+			putParenth(expr, Pos, rightBound + 1);
+			rightBound++;
+		}
+		Pos = expr.find('-', ++rightBound);
+	}
+
+	Pos = expr.find(')');    //expanding implicit multiplication
+
+	while (Pos != std::string::npos)
+	{
+		if (expr[Pos + 1] == '(')
+		{
+			expr.insert(++Pos, 1, '*');
+		}
+		Pos = expr.find(')', ++Pos);
+	}
+
+	/*Enclosing operators*/
+
+
+	Pos = expr.find_first_of("*/");  //enclosing '*' and '/'
+
+	while (Pos != std::string::npos)
+	{
+		unsigned int leftBound = findPair(expr, Pos - 1, false);
+		unsigned int rightBound = findPair(expr, Pos + 1, true);
+		if (leftBound == 0 || rightBound == expr.length() - 1 || expr[leftBound - 1] != '(' || expr[rightBound + 1] != ')')
+		{
+
+			putParenth(expr, leftBound, rightBound + 1);
+			rightBound++;
+		}
+		Pos = expr.find_first_of("*/", ++rightBound);
+	}
+
+	Pos = expr.find('+');  //enclosing '+'
+
+	while (Pos != std::string::npos)
+	{
+		unsigned int leftBound = findPair(expr, Pos - 1, false);
+		unsigned int rightBound = findPair(expr, Pos + 1, true);
+		if (leftBound == 0 || rightBound == expr.length() - 1 || expr[leftBound - 1] != '(' || expr[rightBound + 1] != ')')
+		{
+			putParenth(expr, leftBound, rightBound + 1);
+			rightBound++;
+		}
+		Pos = expr.find('+', ++rightBound);
+	}
+
+	/*erasing bounding parentheses*/
+	expr.erase(0, 1);
+	expr.erase(expr.length() - 1, 1);
+
+	return expr;
+};
+
+node::functions node::resolveSymbol(std::string fnc)
+{
+	if (fnc == "-")
+		return functions::minus;
 	if (fnc == "abs")
 		return functions::abs;
 	if (fnc == "sin")
@@ -82,46 +288,34 @@ functions resolveFunction(std::string fnc)
 
 }
 
-std::string processExpr(std::string expr)
+node::node(std::string expr)
 {
-	std::string newstr;
-	unsigned int Pos = expr.find_first_of("0123456789");
-	while (Pos != std::string::npos)
-	{
-		Pos = expr.find_first_of("0123456789", Pos);
-	}
-	return newstr;
-};
-
-node* extract(std::string expr)
-{
-	node* elem = new node;
 	unsigned int Pos = expr.find("(");
 	if (Pos != std::string::npos)
 	{
-		unsigned int closed = findClosed(expr, Pos);
+		unsigned int closed = findPair(expr, Pos, 1);
 		if (closed < expr.length() - 1)
 		{
-			elem->type = options::oprator;
-			elem->field.op = expr[closed + 1];
+			type = options::oprator;
+			field.op = expr[closed + 1];
 
-			std::string left = expr.substr(Pos + 1, closed - Pos - 1);
+			std::string leftexpr = expr.substr(Pos + 1, closed - Pos - 1);
 
 			Pos = closed + 2;
-			closed = findClosed(expr, Pos);
-			std::string right = expr.substr(Pos + 1, closed - Pos - 1);
+			closed = findPair(expr, Pos, 1);
+			std::string rightexpr = expr.substr(Pos + 1, closed - Pos - 1);
 
-			elem->left = extract(left);
-			elem->right = extract(right);
+			left = new node(leftexpr);
+			right = new node(rightexpr);
 
 		}
 		else
 		{
-			elem->type = options::function;
-			elem->field.func = expr.substr(0, Pos);
+			type = options::function;
+			field.func = resolveSymbol(expr.substr(0, Pos));
 
-			std::string right = expr.substr(Pos + 1, closed - Pos - 1);
-			elem->right = extract(right);
+			std::string rightexpr = expr.substr(Pos + 1, closed - Pos - 1);
+			right = new node(rightexpr);
 
 		}
 	}
@@ -129,15 +323,46 @@ node* extract(std::string expr)
 	{
 		if (expr == "x")
 		{
-			elem->type = options::parameter;
+			type = options::parameter;
 		}
 		else
 		{
-			elem->type = options::constant;
-			elem->field.nr = stof(expr);
+			type = options::constant;
+			field.nr = stof(expr);
 		}
 	}
-	return elem;
+}
+
+void node::simplifyTree()
+{
+	if (type == options::oprator)
+	{
+		left->simplifyTree();
+		right->simplifyTree();
+		if (left->type == options::constant && right->type == options::constant)
+		{
+			field.nr = this->computeTree(0);
+			type = options::constant;
+			delete left;
+			left = nullptr;
+			delete right;
+			right = nullptr;
+		}
+	}
+	else
+	{
+		if (type == options::function)
+		{
+			right->simplifyTree();
+			if (right->type == options::constant)
+			{
+				field.nr = this->computeTree(0);
+				type = options::constant;
+				delete right;
+				right = nullptr;
+			}
+		}
+	}
 }
 
 float const node::computeTree(float parameter)
@@ -180,11 +405,15 @@ float const node::computeTree(float parameter)
 	}
 	case options::function:
 	{
-		switch (resolveFunction(field.func))
+		switch (field.func)
 		{
 		case functions::invalid:
 		{
 			return 0;
+		}
+		case functions::minus:
+		{
+			return -1 * right->computeTree(parameter);
 		}
 		case functions::abs:
 		{
@@ -291,5 +520,3 @@ float const node::computeTree(float parameter)
 	}
 	}
 }
-
-

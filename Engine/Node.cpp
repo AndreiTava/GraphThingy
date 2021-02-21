@@ -70,7 +70,7 @@ void node::processExpr(std::string& expr)
 	/*
 	KNOWN PROBLEMS / TODO (*,**,***, difficulty to fix),(+,++,+++, necessity of feature):
 
-
+	(**), (+++) DOES NOT SUPPORT EXP
 	(***),(+++) DOES NOT PROPERLY CHECK FOR SYNTAX ERRORS
 	(*),  (++)  DOES NOT REMOVE UNNECESSARY BRACKETS ( ((x)) )
 	(***),(+)   DOES NOT SUPPORT IMPLICIT FUNCTION CHAINING (sincosx - >sin(cos(x)))

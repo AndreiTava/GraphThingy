@@ -26,10 +26,9 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	func1( expr1 ),
-	func2( expr2 )
+	function( expression )
 {
-	func3 = func1 + func2;
+
 }
 
 
@@ -60,13 +59,20 @@ void Game::UpdateModel()
 		offsetY -= 5;
 	if (wnd.kbd.KeyIsPressed(VK_DOWN))
 		offsetY += 5;
+	if (wnd.kbd.KeyIsPressed(VK_RETURN))
+	{
+		in.open("input.txt");
+		in >> expression;
+		function = expression;
+		in.close();
+	}
 }
 
 void Game::ComposeFrame()
 {
 	
 	gfx.DrawAxes(Colors::White, interval, offsetX, offsetY);
-	gfx.Graph(func3, Colors::Red, interval, offsetX, offsetY, false);
+	gfx.Graph(function, Colors::Red, interval, offsetX, offsetY, false);
 	
 }
 

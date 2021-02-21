@@ -25,6 +25,7 @@
 #include "Graphics.h"
 #include "Functions.h"
 #include "Node.h"
+#include <fstream>
 
 class Game
 {
@@ -48,10 +49,8 @@ private:
 	int offsetX = 0;
 	int offsetY = 0;
 	float step = 1.0f;
-	std::string expr1 = "sin(x)";
-	std::string expr2 = "x^2";
-	node func1;
-	node func2;
-	node func3;
+	std::string expression = "0";
+	node function;
+	std::ifstream in;
 	/********************************/
 };

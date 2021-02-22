@@ -62,7 +62,8 @@ void Game::UpdateModel()
 	if (wnd.kbd.KeyIsPressed(VK_RETURN))
 	{
 		in.open("input.txt");
-		in >> expression;
+		std::getline(in, expression);
+		in.close();
 		function = expression;
 		in.close();
 	}

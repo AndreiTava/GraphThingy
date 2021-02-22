@@ -104,6 +104,10 @@ void node::processExpr(std::string& expr)
 		unsigned int argEnd = 0;
 
 		argStart = expr.find_first_of("(-0123456789x", Pos + 1);
+		if (expr[Pos] == 'e' && expr[argStart] == 'x')
+		{
+			argStart += 2;
+		}
 		if (expr[argStart] == '(')
 		{
 			argEnd = findPair(expr, argStart, true);
@@ -129,10 +133,13 @@ void node::processExpr(std::string& expr)
 
 	while (Pos != std::string::npos)
 	{
-		if (Pos == expr.length() - 1 || Pos == 0 || expr[Pos - 1] != '(' || expr[Pos + 1] != ')')
+		if (expr[Pos - 1] != 'e')
 		{
-			putParenth(expr, Pos, Pos + 1);
-			Pos++;
+			if (Pos == expr.length() - 1 || Pos == 0 || expr[Pos - 1] != '(' || expr[Pos + 1] != ')')
+			{
+				putParenth(expr, Pos, Pos + 1);
+				Pos++;
+			}
 		}
 		Pos = expr.find('x', ++Pos);
 	}

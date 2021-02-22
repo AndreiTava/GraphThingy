@@ -49,7 +49,7 @@ private:
 	int offsetX = 0;
 	int offsetY = 0;
 	float step = 1.0f;
-	std::string expression = "0";
+	std::string expression = "exp(-x^2)";
 	node function;
 	std::ifstream in;
 	/********************************/
